@@ -1,8 +1,10 @@
 package r99.developer.id.kowlegesharing2;
 
+import android.graphics.Color;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
@@ -22,6 +24,7 @@ import java.util.Map;
 
 
 public class Chat extends AppCompatActivity {
+    TextView nama,isi;
     LinearLayout layout;
     RelativeLayout layout_2;
     ImageView sendButton;
@@ -68,10 +71,10 @@ public class Chat extends AppCompatActivity {
                 String userName = map.get("user").toString();
 
                 if(userName.equals(UserDetails.username)){
-                    addMessageBox("You:-\n" + message, 1);
+                    addMessageBox(  message, 1,"You");
                 }
                 else{
-                    addMessageBox(UserDetails.chatWith + ":-\n" + message, 2);
+                    addMessageBox(  message, 2,UserDetails.chatWith);
                 }
             }
 
@@ -97,23 +100,30 @@ public class Chat extends AppCompatActivity {
         });
     }
 
-    public void addMessageBox(String message, int type){
+    public void addMessageBox(String message, int type, String namas){
+        View chat = getLayoutInflater().inflate(R.layout.chat, null);
+
+        nama = chat.findViewById(R.id.nama);
+        isi  = chat.findViewById(R.id.isi);
+
         TextView textView = new TextView(Chat.this);
-        textView.setText(message);
+        nama.setText(namas);
+        isi.setText(message);
 
         LinearLayout.LayoutParams lp2 = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         lp2.weight = 1.0f;
 
         if(type == 1) {
             lp2.gravity = Gravity.RIGHT;
-            textView.setBackgroundResource(R.drawable.inchat);
+
+            chat.setBackgroundColor(getResources().getColor(R.color.colorBlue));
         }
         else{
             lp2.gravity = Gravity.LEFT;
-            textView.setBackgroundResource(R.drawable.outchat);
+            chat.setBackgroundColor(getResources().getColor(R.color.colorGreen));
         }
-        textView.setLayoutParams(lp2);
-        layout.addView(textView);
+        chat.setLayoutParams(lp2);
+        layout.addView(chat);
         scrollView.fullScroll(View.FOCUS_DOWN);
     }
 }
