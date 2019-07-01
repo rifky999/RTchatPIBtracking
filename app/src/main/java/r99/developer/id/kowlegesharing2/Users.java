@@ -23,12 +23,16 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.Iterator;
 
+import r99.developer.id.kowlegesharing2.Adapter.AdapterUsers;
+import r99.developer.id.kowlegesharing2.Model.MUsers;
+
 public class Users extends AppCompatActivity {
     ListView usersList;
     TextView noUsersText;
     ArrayList<String> al = new ArrayList<>();
     int totalUsers = 0;
     ProgressDialog pd;
+    AdapterUsers mAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

@@ -1,48 +1,63 @@
-package r99.developer.id.kowlegesharing2;
+package r99.developer.id.kowlegesharing2.Upload;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.net.Uri;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.io.BufferedWriter;
 import java.io.DataOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.nio.charset.StandardCharsets;
 
+import r99.developer.id.kowlegesharing2.MainActivity;
 import r99.developer.id.kowlegesharing2.PathFile.FilePath;
+import r99.developer.id.kowlegesharing2.R;
 
-public class MainActivity extends AppCompatActivity implements View.OnClickListener{
+public class UploadLaporan extends AppCompatActivity implements View.OnClickListener{
 
     private static final int PICK_FILE_REQUEST = 1;
     private static final String TAG = MainActivity.class.getSimpleName();
     private String selectedFilePath;
-    private String SERVER_URL = "http://coderefer.com/extras/UploadToServer.php";
+    private String SERVER_URL = "http://10.0.2.2/knowlege/insertlaporan.php";
     ImageView ivAttachment;
     Button bUpload;
     TextView tvFileName;
+    EditText nama,judul,keterangan;
+    Spinner kategori;
     ProgressDialog dialog;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.upload_laporan);
         ivAttachment = (ImageView) findViewById(R.id.ivAttachment);
         bUpload = (Button) findViewById(R.id.b_upload);
         tvFileName = (TextView) findViewById(R.id.tv_file_name);
+        nama = findViewById(R.id.nama_laporan);
+        judul = findViewById(R.id.judul_laporan);
+        keterangan = findViewById(R.id.keterangan_laporan);
+        kategori = findViewById(R.id.list_kategori);
+
         ivAttachment.setOnClickListener(this);
         bUpload.setOnClickListener(this);
     }
@@ -58,17 +73,21 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
             //on upload button Click
             if(selectedFilePath != null){
-                dialog = ProgressDialog.show(MainActivity.this,"","Uploading File...",true);
+//                dialog = ProgressDialog.show(UploadLaporan.this,"","Uploading File...",true);
 
                 new Thread(new Runnable() {
                     @Override
                     public void run() {
                         //creating new thread to handle Http Operations
-                        uploadFile(selectedFilePath);
+                        String vnama = nama.getText().toString();
+                        String vjudul= judul.getText().toString();
+                        String vkete = keterangan.getText().toString();
+                        String vkate = kategori.getSelectedItem().toString();
+                        uploadFile(selectedFilePath,vnama,vjudul,vkete,vkate);
                     }
                 }).start();
             }else{
-                Toast.makeText(MainActivity.this,"Please choose a File First",Toast.LENGTH_SHORT).show();
+                Toast.makeText(UploadLaporan.this,"Please choose a File First",Toast.LENGTH_SHORT).show();
             }
 
         }
@@ -109,7 +128,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     //android upload file to server
-    public int uploadFile(final String selectedFilePath){
+    public int uploadFile(final String selectedFilePath,String nama,String judul,String keterangan,String kategori){
 
         int serverResponseCode = 0;
 
@@ -130,7 +149,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         final String fileName = parts[parts.length-1];
 
         if (!selectedFile.isFile()){
-            dialog.dismiss();
+//            dialog.dismiss();
 
             runOnUiThread(new Runnable() {
                 @Override
@@ -141,6 +160,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             return 0;
         }else{
             try{
+                String urlParameters  = "nama=a&param2=b&param3=c";
+                byte[] postData       = urlParameters.getBytes( StandardCharsets.UTF_8 );
                 FileInputStream fileInputStream = new FileInputStream(selectedFile);
                 URL url = new URL(SERVER_URL);
                 connection = (HttpURLConnection) url.openConnection();
@@ -153,16 +174,18 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 connection.setRequestProperty("Content-Type", "multipart/form-data;boundary=" + boundary);
                 connection.setRequestProperty("uploaded_file",selectedFilePath);
 
+
+
                 //creating new dataoutputstream
                 dataOutputStream = new DataOutputStream(connection.getOutputStream());
 
                 //writing bytes to data outputstream
                 dataOutputStream.writeBytes(twoHyphens + boundary + lineEnd);
                 dataOutputStream.writeBytes("Content-Disposition: form-data; name=\"uploaded_file\";filename=\""
-                        + selectedFilePath + "\"" + lineEnd);
+                        + selectedFilePath +lineEnd);
 
                 dataOutputStream.writeBytes(lineEnd);
-
+                dataOutputStream.write(postData);
                 //returns no. of bytes present in fileInputStream
                 bytesAvailable = fileInputStream.available();
                 //selecting the buffer size as minimum of available bytes or 1 MB
@@ -188,14 +211,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 serverResponseCode = connection.getResponseCode();
                 String serverResponseMessage = connection.getResponseMessage();
 
-                Log.i(TAG, "Server Response is: " + serverResponseMessage + ": " + serverResponseCode);
+                Log.i(TAG, "Server Response is: " + serverResponseMessage + ": " + serverResponseCode+nama);
 
                 //response code of 200 indicates the server status OK
                 if(serverResponseCode == 200){
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            tvFileName.setText("File Upload completed.\n\n You can see the uploaded file here: \n\n" + "http://coderefer.com/extras/uploads/"+ fileName);
+                            tvFileName.setText("File Upload completed.\n\n You can see the uploaded file here: \n\n" + "laporan/"+ fileName);
                         }
                     });
                 }
@@ -212,18 +235,18 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        Toast.makeText(MainActivity.this,"File Not Found",Toast.LENGTH_SHORT).show();
+                        Toast.makeText(UploadLaporan.this,"File Not Found",Toast.LENGTH_SHORT).show();
                     }
                 });
             } catch (MalformedURLException e) {
                 e.printStackTrace();
-                Toast.makeText(MainActivity.this, "URL error!", Toast.LENGTH_SHORT).show();
+                Log.d(TAG, "uploadFile: URL ERRO");
 
             } catch (IOException e) {
                 e.printStackTrace();
-                Toast.makeText(MainActivity.this, "Cannot Read/Write File!", Toast.LENGTH_SHORT).show();
+                Log.d(TAG, "uploadFile: cant Write File");
             }
-            dialog.dismiss();
+//            dialog.dismiss();
             return serverResponseCode;
         }
 

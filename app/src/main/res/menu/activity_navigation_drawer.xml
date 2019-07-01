@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:showIn="navigation_view">
+
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/nav_home"
+            android:icon="@drawable/home"
+            android:title="Home" />
+        <item
+            android:id="@+id/nav_laporan"
+            android:icon="@drawable/laporan"
+            android:title="Laporan" />
+        <item
+            android:id="@+id/nav_dokumen"
+            android:icon="@drawable/dokumen"
+            android:title="Dokumen" />
+        <item
+            android:id="@+id/nav_studikasus"
+            android:icon="@drawable/studi_kasus"
+            android:title="Studi Kasus" />
+        <item
+            android:id="@+id/nav_diskusi"
+            android:icon="@drawable/diskusi"
+            android:title="Diskusi" />
+        <item
+            android:id="@+id/nav_pesan"
+            android:icon="@drawable/pesan"
+            android:title="Pesan" />
+    </group>
+
+    <item android:title="Acount">
+        <menu>
+            <item
+                android:id="@+id/nav_logout"
+                android:icon="@drawable/logout"
+                android:title="Logout" />
+        </menu>
+    </item>
+
+</menu>

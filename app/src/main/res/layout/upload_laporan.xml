@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
+    android:orientation="vertical">
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:minHeight="?attr/actionBarSize"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:titleTextColor="@android:color/white"
+        android:background="@color/colorPrimary">
+        <ImageView
+            android:id="@+id/exit"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:src="@drawable/back"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Laporan"
+            android:textStyle="bold"
+            android:textSize="26dp"
+            android:textColor="@color/cardview_dark_background"
+            android:layout_gravity="center"
+            android:id="@+id/toolbar_title" />
+
+    </android.support.v7.widget.Toolbar>
+
+    <!-- include your activity_main.xml here  -->
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:paddingTop="60dp"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp">
+        <Spinner
+            android:id="@+id/list_kategori"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:entries="@array/kategori_arrays"
+            android:prompt="@string/app_name"></Spinner>
+        <EditText
+            android:id="@+id/nama_laporan"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Nama Pegawai"
+            />
+        <EditText
+            android:id="@+id/judul_laporan"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Judul"
+            />
+        <EditText
+            android:id="@+id/keterangan_laporan"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Keterangan" />
+
+        <RelativeLayout
+            xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:tools="http://schemas.android.com/tools"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:paddingTop="@dimen/activity_vertical_margin"
+            android:background="@color/cardview_light_background"
+            tools:context="com.coderefer.uploadfiletoserver.MainActivity"
+            android:paddingBottom="30dp">
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:textSize="18sp"
+                android:id="@+id/tvHeading"
+                android:text="Klik Gambar Dibawah Untuk Upload"
+                android:textColor="#242424"
+                android:textStyle="bold"/>
+            <ImageView
+                android:id="@+id/ivAttachment"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:src="@drawable/dokumen"
+                android:layout_marginTop="60dp"
+                android:layout_centerHorizontal="true"/>
+
+            <TextView
+                android:id="@+id/tv_file_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="#3A3A3A"
+                android:layout_marginTop="10dp"
+                android:gravity="center"
+                android:layout_below="@+id/ivAttachment"
+                android:layout_centerHorizontal="true"/>
+
+            <Button
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/b_upload"
+                android:text="Upload"
+                android:textStyle="bold"
+                android:textSize="20sp"
+                android:layout_alignParentBottom="true"
+                android:gravity="center"
+                android:textColor="#fff"
+                android:background="@drawable/rounded_black"/>
+
+        </RelativeLayout>
+
+    </LinearLayout>
+
+
+
+</RelativeLayout>

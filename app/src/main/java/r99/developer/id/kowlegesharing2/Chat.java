@@ -24,7 +24,7 @@ import java.util.Map;
 
 
 public class Chat extends AppCompatActivity {
-    TextView nama,isi;
+    TextView nama,isi,isi2;
     LinearLayout layout;
     RelativeLayout layout_2;
     ImageView sendButton;
@@ -36,6 +36,7 @@ public class Chat extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chat);
+
 
         layout = (LinearLayout) findViewById(R.id.layout1);
         layout_2 = (RelativeLayout)findViewById(R.id.layout2);
@@ -49,7 +50,7 @@ public class Chat extends AppCompatActivity {
 
         sendButton.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
+            public void onClick(View v)  {
                 String messageText = messageArea.getText().toString();
 
                 if(!messageText.equals("")){
@@ -71,10 +72,10 @@ public class Chat extends AppCompatActivity {
                 String userName = map.get("user").toString();
 
                 if(userName.equals(UserDetails.username)){
-                    addMessageBox(  message, 1,"You");
+                    addMessageBox(  message, 1,"You :");
                 }
                 else{
-                    addMessageBox(  message, 2,UserDetails.chatWith);
+                    addMessageBox(  message, 2,UserDetails.chatWith + " :");
                 }
             }
 
@@ -103,24 +104,26 @@ public class Chat extends AppCompatActivity {
     public void addMessageBox(String message, int type, String namas){
         View chat = getLayoutInflater().inflate(R.layout.chat, null);
 
-        nama = chat.findViewById(R.id.nama);
+        nama = chat.findViewById(R.id.name);
         isi  = chat.findViewById(R.id.isi);
+        isi2  = chat.findViewById(R.id.isi2);
 
         TextView textView = new TextView(Chat.this);
         nama.setText(namas);
         isi.setText(message);
+        isi2.setText(message);
 
         LinearLayout.LayoutParams lp2 = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         lp2.weight = 1.0f;
 
         if(type == 1) {
             lp2.gravity = Gravity.RIGHT;
+               isi.setVisibility(View.GONE);
 
-            chat.setBackgroundColor(getResources().getColor(R.color.colorBlue));
         }
         else{
             lp2.gravity = Gravity.LEFT;
-            chat.setBackgroundColor(getResources().getColor(R.color.colorGreen));
+            isi2.setVisibility(View.GONE);
         }
         chat.setLayoutParams(lp2);
         layout.addView(chat);

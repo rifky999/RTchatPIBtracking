@@ -31,6 +31,7 @@ public class Login extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
+
         registerUser = findViewById(R.id.register);
         username = (EditText) findViewById(R.id.username);
         password = (EditText) findViewById(R.id.password);
@@ -42,6 +43,12 @@ public class Login extends AppCompatActivity {
                 startActivity(new Intent(Login.this, Register.class));
             }
         });
+
+        Session session = new Session(getApplicationContext());
+        if (session.getusename()!=null && session.getusename()!=""){
+            UserDetails.username = session.getusename();
+            startActivity(new Intent(Login.this, NavigationActivity.class));
+        }
 
         loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -71,9 +78,13 @@ public class Login extends AppCompatActivity {
                                     if (!obj.has(user)) {
                                         Toast.makeText(Login.this, "user not found", Toast.LENGTH_LONG).show();
                                     } else if (obj.getJSONObject(user).getString("password").equals(pass)) {
-                                        UserDetails.username = user;
-                                        UserDetails.password = pass;
-                                        startActivity(new Intent(Login.this, Users.class));
+                                            UserDetails.username = user;
+                                            UserDetails.password = pass;
+                                            Session session = new Session(getApplicationContext());
+                                            session.setusername(user);
+                                            session.setstatus(user);
+
+                                        startActivity(new Intent(Login.this, NavigationActivity.class));
                                     } else {
                                         Toast.makeText(Login.this, "incorrect password", Toast.LENGTH_LONG).show();
                                     }

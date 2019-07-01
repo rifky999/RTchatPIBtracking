@@ -86,7 +86,6 @@ public class Register extends AppCompatActivity {
                             }
                             else {
                                 try {
-                                    Log.d("WOW", "onResponse: "+s);
                                     JSONObject obj = new JSONObject(s);
 
                                     if (!obj.has(user)) {
